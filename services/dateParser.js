@@ -1,5 +1,9 @@
 const getDateFromString = stringDate => {
-    return new Date(stringDate.substring(6, 10), stringDate.substring(3, 5) - 1, stringDate.substring(0, 2));
+    const year  = stringDate.substring(6, 10);
+    const month = stringDate.substring(3, 5) - 1;
+    const day   = stringDate.substring(0, 2);
+
+    return new Date(year, month, day);
 };
 
 module.exports = {
