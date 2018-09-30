@@ -1,14 +1,12 @@
-const bodyParser = require('body-parser');
-const logger     = require('morgan');
-const http       = require('http');
-var fs = require('fs');
-var https = require('https');
-var privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
-var certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
-var credentials = {key: privateKey, cert: certificate};
-
-var express = require('express');
-
+const fs          = require('fs');
+const http        = require('http');
+const https       = require('https');
+const logger      = require('morgan');
+const express     = require('express');
+const bodyParser  = require('body-parser');
+const privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
+const certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
+const credentials = {key: privateKey, cert: certificate};
 
 const app = express();
 
@@ -27,13 +25,13 @@ models.sequelize.sync().then(() => {
 
 require('./routes')(app);
 
-const port = parseInt(process.env.PORT, 10) || 13000;
-app.set('port', port);
+const httpPort = 13000;
+const httpsPort = 13001;
 
-const server = http.createServer(app);
+const httpServer = http.createServer(app);
 const httpsServer = https.createServer(credentials, app);
 
-server.listen(port);
-httpsServer.listen(13001);
+httpServer.listen(httpPort);
+httpsServer.listen(httpsPort);
 
 module.exports = app;
