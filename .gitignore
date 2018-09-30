@@ -1,2 +1,4 @@
 .idea/
 node_modules/
+sslcert/server.crt
+sslcert/server.key
