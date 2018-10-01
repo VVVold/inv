@@ -1,27 +1,10 @@
 const investingStock = require('../models').investingStock;
-const getDateFromString = require('./dateParser').getDateFromString;
 
-const createInvestingStock = (req, res) => {
+const createInvestingStocks = (stocks) => {
 
-    return investingStock
-        .findOrCreate({
-            where: {
-                shortName: req.body.shortName
-            },
-            defaults: {
-                investingId: req.body.investingStockId,
-                urlId: req.body.urlId,
-                reportDate: getDateFromString(req.body.reportDate)
-            }
-        })
-        .then(stock => res.status(201).send(stock))
-        .catch(error => res.status(400).send(error));
-};
+    validateStocksBeforeSaving(stocks);
 
-const createInvestingStocks = (req, res) => {
-    const investingStocks = req.body.stocks;
-
-    investingStocks.forEach(entity => {
+    stocks.forEach(entity => {
         return investingStock
             .findOrCreate({
                 where: {
@@ -30,7 +13,6 @@ const createInvestingStocks = (req, res) => {
                 defaults: {
                     investingStockId: entity.investingStockId,
                     urlId: entity.urlId,
-                    reportDate: getDateFromString(entity.reportDate)
                 }
             })
             .then(() => res.status(201).send(true))
@@ -38,7 +20,24 @@ const createInvestingStocks = (req, res) => {
     })
 };
 
+const get = async ()=>{
+    const dbStocks = await investingStock.findAll();
+
+    return dbStocks.map(e=>({
+        shortName: e.shortName,
+        urlId: e.urlId
+    }));
+};
+
+function validateStocksBeforeSaving(stocks){
+    const stock = stocks.find(e => !e.shortName || !e.investingStockId || !e.urlId);
+
+    if (stock){
+        throw new Error('Для акции не заполнены все поля: ' + JSON.stringify(stock))
+    }
+}
+
 module.exports = {
-    createInvestingStock,
-    createInvestingStocks
+    createInvestingStocks,
+    get,
 };

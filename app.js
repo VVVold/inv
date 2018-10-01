@@ -11,6 +11,7 @@ const credentials = {key: privateKey, cert: certificate};
 const app = express();
 
 app.use(logger('dev'));
+app.use(require('./middlewares/corsMiddleware'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -23,7 +24,8 @@ models.sequelize.sync().then(() => {
     console.log(error, 'something went wrong')
 });
 
-require('./routes')(app);
+require('./controllers/routersLoader')(app);
+
 
 const httpPort = 13000;
 const httpsPort = 13001;

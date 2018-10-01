@@ -44,15 +44,6 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.DATE
             },
-            // companyId: {
-            //     type: Sequelize.INTEGER,
-            //     onDelete: 'CASCADE',
-            //     references: {
-            //         model: 'stockService',
-            //         key: 'id',
-            //         as: 'companyId'
-            //     }
-            // }
         });
     },
     down: (queryInterface) => {

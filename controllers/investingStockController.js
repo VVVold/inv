@@ -1,6 +1,6 @@
-const services = require('../services/index');
+const investingStockService = require('../services/investingStockService');
 
 module.exports = {
-    createInvestingStock: services.investingStockService.createInvestingStock,
-    createInvestingStocks: services.investingStockService.createInvestingStocks
+    createInvestingStocks: investingStockService.createInvestingStocks,
+    get: investingStockService.get,
 };
