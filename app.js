@@ -1,7 +1,6 @@
 const fs          = require('fs');
 const http        = require('http');
 const https       = require('https');
-const logger      = require('morgan');
 const express     = require('express');
 const bodyParser  = require('body-parser');
 const privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
@@ -10,19 +9,21 @@ const credentials = {key: privateKey, cert: certificate};
 
 const app = express();
 
-app.use(logger('dev'));
 app.use(require('./middlewares/corsMiddleware'));
 
+//todo need to change parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 const models = require('./models');
 
-models.sequelize.sync().then(() => {
-    console.log('sync success');
-}).catch(error => {
-    console.log(error, 'something went wrong')
-});
+models.sequelize.sync()
+    .then(() => {
+        console.log('sync success');
+    })
+    .catch(error => {
+        console.log(error, 'something went wrong')
+    });
 
 require('./controllers/routersLoader')(app);
 

@@ -1,5 +1,7 @@
 const services = require('../services/index');
 
 module.exports = {
-    createStockData: services.stockHistoricalDataService.createStocksData
+    create: services.stockHistoricalDataService.create,
+    get: services.stockHistoricalDataService.get
+
 };

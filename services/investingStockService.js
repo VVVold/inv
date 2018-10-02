@@ -1,7 +1,6 @@
 const investingStock = require('../models').investingStock;
 
-const createInvestingStocks = (stocks) => {
-
+const create = stocks => {
     validateStocksBeforeSaving(stocks);
 
     stocks.forEach(entity => {
@@ -15,8 +14,8 @@ const createInvestingStocks = (stocks) => {
                     urlId: entity.urlId,
                 }
             })
-            .then(() => res.status(201).send(true))
-            .catch(error => res.status(400).send(error));
+            //.then(() => res.status(201).send(true))
+            //.catch(error => res.status(400).send(error));
     })
 };
 
@@ -29,15 +28,15 @@ const get = async ()=>{
     }));
 };
 
-function validateStocksBeforeSaving(stocks){
+const validateStocksBeforeSaving = stocks => {
     const stock = stocks.find(e => !e.shortName || !e.investingStockId || !e.urlId);
 
     if (stock){
         throw new Error('Для акции не заполнены все поля: ' + JSON.stringify(stock))
     }
-}
+};
 
 module.exports = {
-    createInvestingStocks,
+    create,
     get,
 };

@@ -10,9 +10,9 @@ investingStockRouter.get('/get', middlewareCreator.createMiddleware({
     params: []
 }));
 
-investingStockRouter.post('/createInvestingStocks', middlewareCreator.createMiddleware({
+investingStockRouter.post('/create', middlewareCreator.createMiddleware({
     controller: investingStockController,
-    actionName: 'createInvestingStocks',
+    actionName: 'create',
     params: ['stocks']
 }));
 

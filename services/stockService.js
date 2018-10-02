@@ -1,24 +1,9 @@
 const stock = require('../models').stock;
 
-const createStock = (req, res) => {
+const create = stocks => {
+    validateStocksBeforeSaving(stocks);
 
-    return stock
-        .findOrCreate({
-            where: {
-                shortName: req.body.shortName
-            },
-            defaults: {
-                name: req.body.name,
-                deleted: req.body.deleted
-            }
-        })
-        .then(stock => res.status(201).send(stock))
-        .catch(error => res.status(400).send(error));
-};
-
-const createStocks = (req, res) => {
-
-    return req.body.forEach(entity => {
+    return stocks.forEach(entity => {
          stock
              .findOrCreate({
                  where: {
@@ -29,12 +14,30 @@ const createStocks = (req, res) => {
                      deleted: entity.deleted
                  }
             })
-             .then(res.status(201).send(true))
-             .catch(error => res.status(400).send(error));
+             //.then(() => res.status(201).send(true))
+             //.catch(error => res.status(400).send(error));
     })
 };
 
+const get = async ()=>{
+    const dbStocks = await stock.findAll();
+
+    return dbStocks.map(e=>({
+        shortName: e.shortName,
+        name: e.name,
+        deleted: e.deleted
+    }));
+};
+
+const validateStocksBeforeSaving = stocks => {
+    const stock = stocks.find(e => !e.shortName || !e.name || !e.deleted);
+
+    if (stock){
+        throw new Error('Для акции не заполнены все поля: ' + JSON.stringify(stock))
+    }
+};
+
 module.exports = {
-    createStock,
-    createStocks
+    create,
+    get
 };
