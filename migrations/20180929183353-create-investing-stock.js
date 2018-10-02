@@ -12,17 +12,17 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.STRING
             },
-            investingStockId: {
+            name: {
                 allowNull: false,
-                type: Sequelize.INTEGER
+                type: Sequelize.STRING
             },
             urlId: {
                 allowNull: false,
                 type: Sequelize.STRING
             },
-            reportDate: {
+            exchangeId: {
                 allowNull: false,
-                type: Sequelize.DATE
+                type: Sequelize.INTEGER
             },
             createdAt: {
                 allowNull: false,
@@ -32,15 +32,6 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.DATE
             },
-            // companyId: {
-            //     type: Sequelize.INTEGER,
-            //     onDelete: 'CASCADE',
-            //     references: {
-            //         model: 'stockService',
-            //         key: 'id',
-            //         as: 'companyId'
-            //     }
-            // }
         });
     },
     down: (queryInterface) => {

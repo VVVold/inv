@@ -1,12 +1,9 @@
-const stockRouter = require('./stockRouter');
-const investingStockRouter = require('./investingStockRouter');
-const stockHistoricalDataRouter = require('./stockHistoricalDataRouter');
-const bollingerRouter = require('./bollingerRouter');
-
 
 module.exports = app => {
-    app.use('/api/stocks', stockRouter);
-    app.use('/api/investingStocks', investingStockRouter);
-    app.use('/api/stockHistoricalData', stockHistoricalDataRouter);
-    app.use('/api/bollingerRouter', bollingerRouter);
+    app.use('/api/stocks', require('./stockRouter'));
+    app.use('/api/stockHistoricalData', require('./stockHistoricalDataRouter'));
+    app.use('/api/bollingerRouter', require('./bollingerRouter'));
+    app.use('/api/investingStocks', require('./investingStockRouter'));
+    app.use('/api/spbStocks', require('./spbStockRouter'));
+    app.use('/api/tinkoffStocks', require('./tinkoffStockRouter'));
 };

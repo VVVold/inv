@@ -2,16 +2,13 @@
 module.exports = (sequelize, DataTypes) => {
     const investingStock = sequelize.define('investingStock', {
         shortName: DataTypes.STRING,
-        investingStockId: DataTypes.INTEGER,
+        name: DataTypes.STRING,
         urlId: DataTypes.STRING,
-        reportDate: DataTypes.DATE
+        exchangeId: DataTypes.INTEGER,
     }, {});
 
     investingStock.associate = function (models) {
-        // investingStock.belongsTo(models.stock, {
-        //     foreignKey: 'companyId',
-        //     onDelete: 'CASCADE'
-        // });
+
     };
 
     return investingStock;
