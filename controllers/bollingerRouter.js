@@ -10,4 +10,10 @@ bollingerRouter.post('/calculateCoefficient', middlewareCreator.createMiddleware
     params: ['shortName', 'N', 'D']
 }));
 
+bollingerRouter.get('/getCoefficientToAllStocks', middlewareCreator.createMiddleware({
+    controller: bollingerController,
+    actionName: 'getCoefficientToAllStocks',
+    params: []
+}));
+
 module.exports = bollingerRouter;

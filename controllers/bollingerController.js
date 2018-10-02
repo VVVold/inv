@@ -1,5 +1,6 @@
 const bollingerService = require('../services/bollingerService');
 
 module.exports = {
-    calculateCoefficient: bollingerService.calculateCoefficient
+    calculateCoefficient: bollingerService.calculateCoefficient,
+    getCoefficientToAllStocks: bollingerService.getCoefficientToAllStocks
 };
