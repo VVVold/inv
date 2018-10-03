@@ -24,7 +24,7 @@ module.exports = {
       }
     });
   },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('tinkoffStocks');
+  down: (queryInterface) => {
+    return queryInterface.dropTable('tinkoffStocks', 0);
   }
 };

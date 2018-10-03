@@ -16,5 +16,10 @@ stockHistoricalDataRouter.post('/create', middlewareCreator.createMiddleware({
     params: ['stocks']
 }));
 
+stockHistoricalDataRouter.get('/getAllCompanyShortNames', middlewareCreator.createMiddleware({
+    controller: stockHistoricalDataController,
+    actionName: 'getAllCompanyShortNames',
+    params: []
+}));
 
 module.exports = stockHistoricalDataRouter;

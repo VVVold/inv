@@ -1,6 +1,6 @@
 const investingStock = require('../models').investingStock;
 
-const create = async (stocks) => {
+const create = async stocks => {
 
     validateStocksBeforeSaving(stocks);
 
@@ -32,15 +32,15 @@ const get = async ()=>{
     }));
 };
 
-function validateStocksBeforeSaving(stocks){
+const validateStocksBeforeSaving = stocks => {
     const stock = stocks.find(e => !e.shortName || !e.name || !e.exchangeId || !e.urlId);
 
     if (stock){
         throw new Error('Для акции не заполнены все поля: ' + JSON.stringify(stock))
     }
-}
+};
 
 module.exports = {
     create,
-    get,
+    get
 };

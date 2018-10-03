@@ -1,20 +1,23 @@
-const stockHistoricalDataService = require('./stockHistoricalDataService');
-const stockService = require('./stockService');
+const stocksHistoricalData = require('./stockHistoricalDataService');
 
 const compareDate = (stockA, stockB) => {
     return stockB.date.getTime() - stockA.date.getTime();
 };
 
 const compareCoefficient = (stockA, stockB) => {
-    return stockA.coefficient - stockB.coefficient;
+    return stockB.coefficient - stockA.coefficient;
 };
 
-const getNeededStockHistoricalData = async shortName => {
-    const stockHistoricalData = await stockHistoricalDataService.get();
+const getNeededStockHistoricalData = async (stockHistoricalData, shortName) => {
     let neededStocks = [];
+    let N = 0;
 
     stockHistoricalData.forEach(stock => {
+
+
         if (stock.shortName === shortName) {
+            if (++N > 40) return;
+
             neededStocks.push(stock);
         }
     });
@@ -22,16 +25,18 @@ const getNeededStockHistoricalData = async shortName => {
     return neededStocks.sort(compareDate);
 };
 
-const MLN = (stocks, N) => {
+const MLN = (stocks, N, date) => {
     let sum = 0;
     let count = 0;
 
     for (let stock of stocks) {
-        sum += stock.priceClosed;
-        count = ++count;
+        if (date >= stock.date) {
+            sum += stock.priceClosed;
+            count = ++count;
 
-        if (count == N) {
-            return sum / N;
+            if (count == N) {
+                return sum / N;
+            }
         }
     }
 };
@@ -40,6 +45,7 @@ const calculateParams = (stocks, N) => {
     let M = parseInt(N);
     let sumDelta2 = 0;
     let count = 0;
+    let priceClosed;
 
     for (let stock of stocks) {
         let date = stock.date;
@@ -48,14 +54,21 @@ const calculateParams = (stocks, N) => {
         sumDelta2 += Math.pow(stock.priceClosed - mlN, 2);
         count = ++count;
 
+        if (count == 1) {
+            priceClosed = stock.priceClosed;
+        }
+
         if (count == M) {
-            return {sigma: Math.sqrt(sumDelta2 / M), mlN: mlN, priceClosed: stock.priceClosed};
+            return {sigma: Math.sqrt(sumDelta2 / M), mlN: mlN, priceClosed: priceClosed};
         }
     }
 };
 
-const calculateCoefficient = async (shortName, N, D) => {
-    const stocks = await getNeededStockHistoricalData(shortName);
+const calculateCoefficient = async (stockHistoricalData, shortName, N, D) => {
+    const stocks = await getNeededStockHistoricalData(stockHistoricalData, shortName);
+
+    if (stocks.length < 40) console.log('не достаточно значений');
+
     const params = calculateParams(stocks, N);
     const sigma = params.sigma;
     const mlN = params.mlN;
@@ -67,14 +80,21 @@ const calculateCoefficient = async (shortName, N, D) => {
 const getCoefficientToAllStocks = async () => {
     const N = 20;
     const D = 2;
-    const allStocks = await stockService.get();
+    const stocksShortNames = await stocksHistoricalData.getAllCompanyShortNames();
+    const stockHistoricalData = await stocksHistoricalData.get();
     let coefficientTable = [];
 
-    for (let stock of allStocks) {
-        coefficientTable.push({
-            shortName: stock.shortName,
-            coefficient: await calculateCoefficient(stock.shortName, N, D)
-        });
+    for (let stock of stocksShortNames) {
+        try {
+            let coefficient = {
+                shortName: stock.shortName,
+                coefficient: await calculateCoefficient(stockHistoricalData, stock.shortName, N, D)
+            };
+            coefficientTable.push(coefficient);
+            console.log(coefficient)
+        } catch (e) {
+            console.log(`коэффициент для ${stock.shortName} не может быть посчитан`)
+        }
     }
 
     return coefficientTable.sort(compareCoefficient);

@@ -10,6 +10,4 @@ router.post('/create', middlewareCreator.createMiddleware({
     params: ['stocks']
 }));
 
-
-
 module.exports = router;

@@ -46,7 +46,16 @@ const validateStocksBeforeSaving = stocks =>{
     }
 };
 
+const getAllCompanyShortNames = async () => {
+    const stock = await stockData.aggregate('shortName', 'DISTINCT', {plain: false});
+
+    return stock.map(e => ({
+        shortName: e.DISTINCT
+    }));
+};
+
 module.exports = {
     create,
-    get
+    get,
+    getAllCompanyShortNames
 };
