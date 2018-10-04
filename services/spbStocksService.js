@@ -1,4 +1,5 @@
 const spbStocks = require('../models').spbStocks;
+const {exchange, stockStatus} = require('./consts');
 
 const create = async (stocks)=>{
 
@@ -9,8 +10,11 @@ const create = async (stocks)=>{
                     shortName: entity.shortName,
                 },
                 defaults: {
-                    deleted: entity.deleted,
                     name: entity.name,
+                    exchangeId: exchange.NOT_DEFINED,
+                    status: stockStatus.active,
+                    tinkoffAvailable: true,
+                    finamAvailable: true,
                 }
             });
     });
@@ -18,8 +22,42 @@ const create = async (stocks)=>{
     await Promise.all(saveStocksPromises);
 };
 
+const get = async (filterOptions)=>{
+    if (filterOptions === undefined)
+        filterOptions = {};
+
+    if (!filterOptions.hasOwnProperty('deleted')){
+        filterOptions.deleted = null;
+    }
+
+    if (!filterOptions.hasOwnProperty('status')){
+        filterOptions.status = stockStatus.active;
+    }
+
+    const dbStocks = await spbStocks.findAll({where : filterOptions});
+
+    return dbStocks.map(e=>({
+        id: e.id,
+        shortName: e.shortName,
+        name: e.name,
+        exchangeId: e.exchangeId,
+        status: e.status,
+        tinkoffAvailable: e.tinkoffAvailable,
+        finamAvailable: e.finamAvailable,
+    }));
+};
+
+const updateFieldsById = async (id, properties)=>{
+    spbStocks.update(
+        properties,
+        { where: { id: id } }
+    );
+};
+
 module.exports = {
-    create
+    create,
+    get,
+    updateFieldsById
 };
 
 

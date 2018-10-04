@@ -15,6 +15,7 @@ const create = async stocks => {
                     defaults: {
                         name: entity.name,
                         urlId: entity.urlId,
+                        investingStockId: entity.investingStockId,
                     }
                 });
         }catch (e) {
@@ -23,12 +24,15 @@ const create = async stocks => {
     }
 };
 
-const get = async ()=>{
-    const dbStocks = await investingStock.findAll();
+const get = async (filterOptions)=>{
+
+    const dbStocks = await investingStock.findAll({ where: filterOptions });
 
     return dbStocks.map(e=>({
         shortName: e.shortName,
-        urlId: e.urlId
+        urlId: e.urlId,
+        investingStockId: e.investingStockId,
+        exchangeId: e.exchangeId,
     }));
 };
 

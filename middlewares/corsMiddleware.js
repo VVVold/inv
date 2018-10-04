@@ -1,6 +1,6 @@
 module.exports = (req, res, next) => {
     if (req.method === 'OPTIONS') {
-        return res.send(200);
+        return res.sendStatus(200);
     }
 
     res.header('Access-Control-Allow-Origin', 'ru.investing.com');

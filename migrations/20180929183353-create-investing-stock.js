@@ -20,6 +20,10 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.STRING
             },
+            investingStockId: {
+                allowNull: false,
+                type: Sequelize.INTEGER
+            },
             exchangeId: {
                 allowNull: false,
                 type: Sequelize.INTEGER

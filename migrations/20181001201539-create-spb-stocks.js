@@ -14,6 +14,22 @@ module.exports = {
         name: {
             type: Sequelize.STRING
         },
+        exchangeId: {
+            allowNull: false,
+            type: Sequelize.INTEGER
+        },
+        status: {
+            allowNull: false,
+            type: Sequelize.INTEGER
+        },
+        tinkoffAvailable: {
+            allowNull: false,
+            type: Sequelize.BOOLEAN
+        },
+        finamAvailable: {
+            allowNull: false,
+            type: Sequelize.BOOLEAN
+        },
       deleted: {
         type: Sequelize.BOOLEAN
       },
