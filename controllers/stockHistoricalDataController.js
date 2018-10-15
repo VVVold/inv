@@ -3,5 +3,8 @@ const stockHistoricalDataService = require('../services/stockHistoricalDataServi
 module.exports = {
     create: stockHistoricalDataService.create,
     get: stockHistoricalDataService.get,
-    getAllCompanyShortNames: stockHistoricalDataService.getAllCompanyShortNames
+    getAllCompanyShortNames: stockHistoricalDataService.getAllCompanyShortNames,
+    getStocksByShortName: stockHistoricalDataService.getStocksByShortName,
+    getStocksByPeriodAndDate: stockHistoricalDataService.getStocksByPeriodAndDate,
+    getStocksByShortNamePeriodAndDate: stockHistoricalDataService.getStocksByShortNamePeriodAndDate
 };

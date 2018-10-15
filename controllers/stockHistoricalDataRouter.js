@@ -22,4 +22,22 @@ stockHistoricalDataRouter.get('/getAllCompanyShortNames', middlewareCreator.crea
     params: []
 }));
 
+stockHistoricalDataRouter.post('/getStocksByShortName', middlewareCreator.createMiddleware({
+    controller: stockHistoricalDataController,
+    actionName: 'getStocksByShortName',
+    params: ['shortName']
+}));
+
+stockHistoricalDataRouter.post('/getStocksByPeriodAndDate', middlewareCreator.createMiddleware({
+    controller: stockHistoricalDataController,
+    actionName: 'getStocksByPeriodAndDate',
+    params: ['period', 'date']
+}));
+
+stockHistoricalDataRouter.post('/getStocksByShortNamePeriodAndDate', middlewareCreator.createMiddleware({
+    controller: stockHistoricalDataController,
+    actionName: 'getStocksByShortNamePeriodAndDate',
+    params: ['shortName', 'period', 'date']
+}));
+
 module.exports = stockHistoricalDataRouter;

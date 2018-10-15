@@ -1,6 +1,7 @@
 const stockData = require('../models').stockHistoricalData;
 const getDateFromString = require('./dateParser').getDateFromString;
 
+
 const create = stocks => {
     validateStocksBeforeSaving(stocks);
 
@@ -29,7 +30,7 @@ const get = async ()=>{
 
     return dbStocks.map(e=>({
         shortName: e.shortName,
-        date: new Date(e.date),
+        date: e.date,
         priceMax: e.priceMax,
         priceMin: e.priceMin,
         priceOpened: e.priceOpened,
@@ -54,8 +55,76 @@ const getAllCompanyShortNames = async () => {
     }));
 };
 
+const getStocksByShortName = async shortName => {
+    const dbStocks = await stockData.findAll({
+        where: {
+            shortName: shortName
+        }
+    });
+
+    return dbStocks.map(e => ({
+        shortName: e.shortName,
+        date: e.date,
+        priceMax: e.priceMax,
+        priceMin: e.priceMin,
+        priceOpened: e.priceOpened,
+        priceClosed: e.priceClosed,
+        volume: e.volume
+    }));
+};
+
+const getStocksByPeriodAndDate = async (period, date) => {
+    const endDate = getDateFromString(date);
+    const startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() - period * 58);
+
+    const dbStocks = await stockData.findAll({
+        where: {
+            date: {
+                '$lte': endDate,
+                '$gte': startDate
+            }
+        }
+    });
+
+    return dbStocks.map(e => ({
+        shortName: e.shortName,
+        date: e.date,
+        priceMax: e.priceMax,
+        priceMin: e.priceMin,
+        priceOpened: e.priceOpened,
+        priceClosed: e.priceClosed,
+        volume: e.volume
+    }));
+};
+
+const getStocksByShortNamePeriodAndDate = async (shortName, period, date) => {
+    const endDate = getDateFromString(date);
+
+    const dbStocks = await stockData.findAll({
+        where: {
+            shortName: shortName,
+            date: {
+                '$lte': endDate
+            }
+        }
+    });
+
+    return dbStocks.map(e => ({
+        shortName: e.shortName,
+        date: e.date,
+        priceMax: e.priceMax,
+        priceMin: e.priceMin,
+        priceOpened: e.priceOpened,
+        priceClosed: e.priceClosed,
+        volume: e.volume
+    }));
+};
+
 module.exports = {
     create,
     get,
-    getAllCompanyShortNames
+    getAllCompanyShortNames,
+    getStocksByShortName,
+    getStocksByPeriodAndDate,
+    getStocksByShortNamePeriodAndDate
 };

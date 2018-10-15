@@ -10,10 +10,28 @@ bollingerRouter.post('/calculateCoefficient', middlewareCreator.createMiddleware
     params: ['shortName', 'N', 'D']
 }));
 
-bollingerRouter.get('/getCoefficientToAllStocks', middlewareCreator.createMiddleware({
+bollingerRouter.post('/getCoefficientToAllStocks', middlewareCreator.createMiddleware({
     controller: bollingerController,
     actionName: 'getCoefficientToAllStocks',
-    params: []
+    params: ['period', 'date']
+}));
+
+bollingerRouter.post('/getDataToPlotForCompany', middlewareCreator.createMiddleware({
+    controller: bollingerController,
+    actionName: 'getDataToPlotForCompany',
+    params: ['shortName', 'period', 'date']
+}));
+
+bollingerRouter.post('/getVolatility', middlewareCreator.createMiddleware({
+    controller: bollingerController,
+    actionName: 'getVolatility',
+    params: ['shortName', 'volatilityPeriod', 'date']
+}));
+
+bollingerRouter.post('/getTrendWithPeriod', middlewareCreator.createMiddleware({
+    controller: bollingerController,
+    actionName: 'getTrendWithPeriod',
+    params: ['shortName', 'period', 'date', 'countOfPeriods']
 }));
 
 module.exports = bollingerRouter;
